@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GREETING.EXE v5.0 - CENTERED</title>
+    <title>GREETING.EXE v5.1 - FIXED DASHES</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -51,7 +51,6 @@
             cursor: pointer;
         }
 
-        /* КОНВЕРТ */
         .envelope {
             position: relative;
             width: 320px;
@@ -62,7 +61,6 @@
             transition: transform 0.5s ease;
         }
 
-        /* КЛАПАН */
         .flap {
             position: absolute;
             top: -2px; left: -2px;
@@ -80,9 +78,9 @@
             transform: rotateX(160deg);
         }
 
-        /* КАРТОЧКА (ПИСЬМО) */
+        /* КАРТОЧКА */
         .letter {
-            position: fixed; /* Фиксируем относительно экрана */
+            position: fixed;
             top: 50%;
             left: 50%;
             width: 280px;
@@ -91,7 +89,7 @@
             border: 4px solid;
             border-image: linear-gradient(to bottom, #ff00de, #00ffff) 1;
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.1); /* Начинает из центра конверта */
+            transform: translate(-50%, -50%) scale(0.1);
             z-index: 2;
             padding: 40px;
             display: flex;
@@ -104,7 +102,6 @@
             box-shadow: 0 0 50px rgba(255, 0, 222, 0.3);
         }
 
-        /* СОСТОЯНИЕ ОТКРЫТОЙ КАРТОЧКИ */
         .envelope.open + .letter {
             opacity: 1;
             width: 90vw;
@@ -116,10 +113,36 @@
             pointer-events: all;
         }
 
+        /* ФИКС ПОЛОСОК */
+        .header-fixed {
+            position: relative;
+            display: inline-block;
+            margin: 15px 0;
+            white-space: nowrap; /* Чтобы текст не переносился внутри блока */
+        }
+
+        .header-fixed::before,
+        .header-fixed::after {
+            content: "---";
+            position: absolute;
+            top: 0;
+            color: #fff;
+        }
+
+        .header-fixed::before {
+            right: 100%;
+            margin-right: 15px;
+        }
+
+        .header-fixed::after {
+            left: 100%;
+            margin-left: 15px;
+        }
+
         .letter p { 
-            font-size: clamp(12px, 4vw, 22px); 
+            font-size: clamp(10px, 3.5vw, 20px); 
             line-height: 1.6; 
-            margin: 15px 0; 
+            margin: 10px 0; 
         }
 
         .highlight { color: #ff00de; text-shadow: 0 0 10px #ff00de; }
@@ -134,7 +157,6 @@
 
         @keyframes blink { 50% { opacity: 0.2; } }
 
-        /* Эффект при открытии для самого конверта */
         .envelope.open {
             transform: translateY(100px) scale(0.8);
             opacity: 0.5;
@@ -149,8 +171,8 @@
                 <div class="flap"></div>
             </div>
             <div class="letter" id="letter">
-                <p>--- ПОЗДРАВЛЕНИЕ ---</p>
-                <p>С ДНЕМ РОЖДЕНИЯ, МЕЛОЧЬ!</p>
+                <p><span class="header-fixed">ПОЗДРАВЛЕНИЕ</span></p>
+                <p>С ДНЕМ РОЖДЕНИЯ, <span class="highlight">МЕЛОЧЬ!</span></p>
                 <p>🎁 🎉 🎂</p>
                 <p class="signature">(сгенерировано твоим отмороженным братом)</p>
             </div>
