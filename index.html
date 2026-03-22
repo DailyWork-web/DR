@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GREETING.EXE v5.0 - CENTERED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #020202;
+            overflow: hidden;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+        }
+
+        /* Сетка фона */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%; height: 200%;
+            top: -50%; left: -50%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.03) 25%, rgba(0, 255, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.03) 75%, rgba(0, 255, 255, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.03) 25%, rgba(0, 255, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.03) 75%, rgba(0, 255, 255, 0.03) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            animation: backgroundMove 30s linear infinite;
+        }
+
+        @keyframes backgroundMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .scene {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* КОНВЕРТ */
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 200px;
+            background: #050505;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            transition: transform 0.5s ease;
+        }
+
+        /* КЛАПАН */
+        .flap {
+            position: absolute;
+            top: -2px; left: -2px;
+            width: 0; height: 0;
+            border-left: 158px solid transparent;
+            border-right: 158px solid transparent;
+            border-top: 110px solid #0a0a0a;
+            filter: drop-shadow(0 2px 1px rgba(0, 255, 255, 0.4));
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 10;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(160deg);
+        }
+
+        /* КАРТОЧКА (ПИСЬМО) */
+        .letter {
+            position: fixed; /* Фиксируем относительно экрана */
+            top: 50%;
+            left: 50%;
+            width: 280px;
+            height: 160px;
+            background: #000;
+            border: 4px solid;
+            border-image: linear-gradient(to bottom, #ff00de, #00ffff) 1;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.1); /* Начинает из центра конверта */
+            z-index: 2;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+            box-shadow: 0 0 50px rgba(255, 0, 222, 0.3);
+        }
+
+        /* СОСТОЯНИЕ ОТКРЫТОЙ КАРТОЧКИ */
+        .envelope.open + .letter {
+            opacity: 1;
+            width: 90vw;
+            height: 80vh;
+            max-width: 800px;
+            max-height: 600px;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1000;
+            pointer-events: all;
+        }
+
+        .letter p { 
+            font-size: clamp(12px, 4vw, 22px); 
+            line-height: 1.6; 
+            margin: 15px 0; 
+        }
+
+        .highlight { color: #ff00de; text-shadow: 0 0 10px #ff00de; }
+        .signature { font-size: clamp(8px, 2vw, 14px) !important; color: #666; margin-top: 30px !important; }
+
+        .instruction {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #00ffff;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.2; } }
+
+        /* Эффект при открытии для самого конверта */
+        .envelope.open {
+            transform: translateY(100px) scale(0.8);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene">
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope" id="envelop">
+                <div class="flap"></div>
+            </div>
+            <div class="letter" id="letter">
+                <p>--- ПОЗДРАВЛЕНИЕ ---</p>
+                <p>С ДНЕМ РОЖДЕНИЯ, МЕЛОЧЬ!</p>
+                <p>🎁 🎉 🎂</p>
+                <p class="signature">(сгенерировано твоим отмороженным братом)</p>
+            </div>
+        </div>
+        <div class="instruction" id="instr">> НАЖМИ ДЛЯ ЗАПУСКА <</div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            const env = document.getElementById('envelop');
+            const instr = document.getElementById('instr');
+            
+            env.classList.toggle('open');
+            
+            if(env.classList.contains('open')) {
+                instr.style.visibility = 'hidden';
+            } else {
+                instr.style.visibility = 'visible';
+            }
+        }
+    </script>
+</body>
+</html>
